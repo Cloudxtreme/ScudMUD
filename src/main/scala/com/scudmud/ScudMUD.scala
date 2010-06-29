@@ -62,6 +62,10 @@ object ScudMUD {
     while(continue) {
       val startTime = System.currentTimeMillis()
 
+      // Tick anything that would use heartbeat ticks as a form of currency
+      // for various actions here.
+
+      // Get messages from the network manager sent by players.
       val messages = NetworkManager.selectNow(players)
 
       // Pass messages to command handler.  No changes to any objects allowed
@@ -73,7 +77,8 @@ object ScudMUD {
       // Apply deltas if we have any.
       if(deltas.size>0)
         applyDeltas(deltas)
- 
+
+      // Sleep the duration of the turn if the turn has not ended yet.
       val diff = System.currentTimeMillis() - startTime
       if(diff<100) {
         println("Diff: " + (100-diff) + " milliseconds " + Thread.currentThread)

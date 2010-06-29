@@ -18,6 +18,10 @@ package com.scudmud
 import org.scalatest.Spec
 import org.scalatest.matchers.MustMatchers
 
+/**
+ * Test to make sure messages are properly split as this is critical and tiny
+ * tweaks can easily screw everything up.
+ */
 class SplitRequestSpec extends Spec with MustMatchers with MavenTrick {
   describe("A request when split") {
     it("should be size 2 if the request equals " + """\r\nquit\r\n""") {

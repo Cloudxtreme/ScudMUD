@@ -20,6 +20,9 @@ import Actor._
 import org.scalatest.Spec
 import org.scalatest.matchers.MustMatchers
 
+/**
+ * Test to make sure the quit command generates a single delta.
+ */
 class QuitCommandSpec extends Spec with MustMatchers with MavenTrick {
   describe("The quit command when executed") {
     it("should generate a PlayerQuitDelta for the player") {

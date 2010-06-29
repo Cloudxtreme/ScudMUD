@@ -16,8 +16,6 @@
 package com.scudmud
 
 import scala.collection.mutable.Map
-import scala.actors._
-import Actor._
 import java.nio.channels._
 import java.nio._
 import java.nio.charset._
