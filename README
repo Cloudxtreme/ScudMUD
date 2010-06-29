@@ -1,0 +1,2 @@
+This project uses Maven as its build tool.  To run this project, type 
+"mvn scala:run".
