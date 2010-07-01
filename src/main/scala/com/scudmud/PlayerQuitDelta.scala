@@ -25,7 +25,7 @@ class PlayerQuitDelta(p: Player) extends Delta {
    */
   def applyChanges() {
     ScudMUD.globalRoom.players-=p
-    NetworkManager.cancelKey(p.s) 
-    ScudMUD.players.removeKey(p.s)
+    NetworkManager.cancelKey(p.key) 
+    ScudMUD.players.removeKey(p.key)
   }  
 }

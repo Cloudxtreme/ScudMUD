@@ -27,7 +27,8 @@ class QuitCommandSpec extends Spec with MustMatchers with MavenTrick {
   describe("The quit command when executed") {
     it("should generate a PlayerQuitDelta for the player") {
       val q = new QuitCommand()
-      val p = new Player(null)
+      // Generate a player with nulls as we don't need real data to test quit.
+      val p = new Player(null, null)
       q.execute("", p, self)
 
       receiveWithin(50) {

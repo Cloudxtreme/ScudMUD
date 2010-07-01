@@ -29,7 +29,7 @@ class SayCommand extends Command {
    * @param a    the actor to send the done message to
    */
   def execute(args: String, p: Player, a: Actor) {
-    ScudMUD.globalRoom.sendMessage(p, p.s+" says \""+args+"\"\n")
+    p.room.sendMessage(p, p.key+" says \""+args+"\"\n")
     p.sendMessage("You say \""+args+"\"\n")
 
     a ! Done()

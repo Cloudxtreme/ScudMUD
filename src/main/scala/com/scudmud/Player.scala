@@ -21,12 +21,12 @@ import java.nio.channels._
  * A player is the game's representation of a user connected to the game.
  * @param s the user's selection key
  */
-class Player(val s: SelectionKey) extends Messageable {
+class Player(val key: SelectionKey, var room: Room) extends Messageable {
   /**
    * Have the player receive the given message.
    * @param message the message for the player to receive
    */
-  def sendMessage(message: String) = NetworkManager.write(s, message)
+  def sendMessage(message: String) = NetworkManager.write(key, message)
   
   /**
    * Have the player receive the given message, but not if they are meant to be
