@@ -38,7 +38,7 @@ class QuitCommand extends Command {
    * Return the command's identifier.
    * @return quit command's identifier is "quit"
    */
-  override def toString() = {
+  def getPrefix() = {
     "quit"
   }
 }

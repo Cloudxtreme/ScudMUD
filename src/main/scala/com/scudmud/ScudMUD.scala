@@ -19,6 +19,8 @@ import scala.collection.mutable.Map
 import scala.actors._
 import Actor._
 import java.nio.channels._
+import javax.script._
+import java.io.File
 
 /**
  * The main static class that controls the heartbeat and keeps everything in 
@@ -34,13 +36,31 @@ object ScudMUD {
    */
   def main(args: Array[String]): Unit = {
     CommandHandler initExecutors (Runtime.getRuntime.availableProcessors*2)
-    val say = new SayCommand
+
+    val pluginDir = new File("scripts/commands")
+    val scriptCommands = loadScriptCommands(pluginDir)  
+   
+    scriptCommands.foreach { command =>  CommandHandler addCommand command }
+    //val say = new SayCommand
     val quit = new QuitCommand
-    CommandHandler addCommand say
+    //CommandHandler addCommand say
     CommandHandler addCommand quit
     NetworkManager // Start listening for clients
     heartBeatLoop()  
     0 
+  }
+
+  def loadScriptCommands(commandDir: File): List[Command] = {
+    val manager = new ScriptEngineManager
+    var commands = List[Command]()
+    commandDir.listFiles().foreach { file =>
+      val name = file.getName
+      val ext = name.substring(name.indexOf(".")+1, name.length)
+      val engine = manager.getEngineByExtension(ext)
+      engine.eval(new java.io.FileReader(file.getAbsolutePath))
+      commands += engine.get("command").asInstanceOf[Command]
+    }
+    commands 
   }
 
   /**

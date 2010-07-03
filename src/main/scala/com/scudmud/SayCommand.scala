@@ -40,7 +40,7 @@ class SayCommand extends Command {
    * Return the command's identifier.
    * @return the identifier used by the say command is "say"
    */
-  override def toString() = {
+  def getPrefix() = {
     "say"
   }
 }

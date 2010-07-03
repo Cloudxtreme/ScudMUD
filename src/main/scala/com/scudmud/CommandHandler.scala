@@ -76,7 +76,7 @@ object CommandHandler {
    * @param c the command to add
    */
   def addCommand(c: Command) {
-    commands.put(c.toString(), c)
+    commands.put(c.getPrefix(), c)
   }
 
   /**

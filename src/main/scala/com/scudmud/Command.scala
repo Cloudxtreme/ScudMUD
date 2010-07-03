@@ -36,5 +36,5 @@ trait Command {
    * to execute it.
    * @return the command's identification string for execution
    */
-  override def toString(): String  
+  def getPrefix(): String  
 }
