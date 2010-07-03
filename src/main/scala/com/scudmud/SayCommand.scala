@@ -27,6 +27,7 @@ class SayCommand extends Command {
    * @param args the message to send to others in the same room
    * @param p    the player sending this message
    * @param a    the actor to send the done message to
+   * @return     an empty delta list
    */
   def execute(args: String, p: Player): java.util.List[Delta] = {
     p.room.sendMessage(p, p.key+" says \""+args+"\"\n")
