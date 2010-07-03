@@ -27,8 +27,10 @@ class QuitCommand extends Command {
    * @param p    the player executing this command
    * @param a    the actor to send the delta to
    */
-  def execute(args: String, p: Player, a: Actor) {
-    a ! DoneWithDelta(new PlayerQuitDelta(p))    
+  def execute(args: String, p: Player): java.util.List[Delta] = {
+    val list = new java.util.ArrayList[Delta]()
+    list.add(new PlayerQuitDelta(p))
+    list
   }
 
   /**

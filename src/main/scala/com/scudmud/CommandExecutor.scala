@@ -28,7 +28,19 @@ class CommandExecutor extends Actor {
   def act() {
     loop {
       react {
-        case ExecuteCommand(c, args, p, a) => c.execute(args, p, a)
+        case ExecuteCommand(c, args, p, a) => 
+          val deltaList = c.execute(args, p)
+          if(deltaList.size==0)
+            a ! Done()
+          else if(deltaList.size==1) 
+            a ! DoneWithDelta(deltaList.get(0))
+          else if(deltaList.size>1) {
+            var scalaDeltaList = List[Delta]()
+            val iter = deltaList.iterator
+            while(iter.hasNext)
+              scalaDeltaList = scalaDeltaList + iter.next
+            a ! DoneWithDeltas(scalaDeltaList)
+          } 
       }
     }
   }

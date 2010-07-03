@@ -28,11 +28,11 @@ class SayCommand extends Command {
    * @param p    the player sending this message
    * @param a    the actor to send the done message to
    */
-  def execute(args: String, p: Player, a: Actor) {
+  def execute(args: String, p: Player): java.util.List[Delta] = {
     p.room.sendMessage(p, p.key+" says \""+args+"\"\n")
     p.sendMessage("You say \""+args+"\"\n")
 
-    a ! Done()
+    new java.util.ArrayList[Delta]()
   }
 
   /**

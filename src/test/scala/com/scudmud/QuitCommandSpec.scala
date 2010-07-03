@@ -29,12 +29,9 @@ class QuitCommandSpec extends Spec with MustMatchers with MavenTrick {
       val q = new QuitCommand()
       // Generate a player with nulls as we don't need real data to test quit.
       val p = new Player(null, null)
-      q.execute("", p, self)
-
-      receiveWithin(50) {
-        case DoneWithDelta(d) => 
-          assert(d.getClass.getName=="com.scudmud.PlayerQuitDelta")
-      }    
+      val deltas = q.execute("", p)
+      assert(deltas.size==1&&
+	deltas.get(0).getClass.getName=="com.scudmud.PlayerQuitDelta")
     }
   }
 }
