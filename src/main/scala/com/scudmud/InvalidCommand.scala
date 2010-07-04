@@ -15,8 +15,6 @@
  */ 
 package com.scudmud
 
-import scala.actors._
-
 /**
  * A command for when the user gives some sort of invalid input.
  */
@@ -29,7 +27,7 @@ class InvalidCommand extends Command {
    */
   def execute(args: String, p: Player): java.util.List[Delta] = {
     p.sendMessage("Wha!?\n")
-
+    p.sendMessage("> ")
     new java.util.ArrayList[Delta]()
   }
 

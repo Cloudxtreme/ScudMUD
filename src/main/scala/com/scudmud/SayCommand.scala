@@ -15,8 +15,6 @@
  */ 
 package com.scudmud
 
-import scala.actors._
-
 /**
  * A command for when the user wants to say something to people in the same
  * room.
