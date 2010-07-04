@@ -91,31 +91,29 @@ object CommandHandler {
     // if it can be executed.
     messages.foreach { messageTuple =>
       val p = messageTuple._1
-      val s = messageTuple._2.trim
+      var s = messageTuple._2
+
+      // Give the user a new prompt.
+      if(s=="\r") {
+        p.sendMessage("> ")
+      } else {
+        s = s.trim 
     
-      // Extract the command name as that will always be the first token in the
-      // request. 
-      var split = s.split(" ", 2) 
-      if(split.length != 2) {
-        val newSplit = new Array[String](2)
-        newSplit(0) = split(0)
-        newSplit(1) = ""
-        split = newSplit
-      }
+        // Extract the command name as that will always be the first token in 
+        // the request. 
+        var split = s.split(" ", 2) 
+        if(split.length != 2) {
+          val newSplit = new Array[String](2)
+          newSplit(0) = split(0)
+          newSplit(1) = ""
+          split = newSplit
+        }
 
-      var validCommand = true
-      val command = commands.get(split(0)) getOrElse { 
-        validCommand = false
-        p.sendMessage("Wha?!\n")
-        null
-      }
+        val command = commands.get(split(0)) getOrElse { new InvalidCommand }
   
-      // TODO: Switch to some logging framework. 
-      println(s)
+        // TODO: Switch to some logging framework. 
+        println(s)
 
-      // If the command exists and can be executed have it executed by a 
-      // command executor.
-      if(validCommand) {
         donesNeeded += 1
         executors(executorNum) ! ExecuteCommand(command, split(1), p, self)
         executorNum += 1

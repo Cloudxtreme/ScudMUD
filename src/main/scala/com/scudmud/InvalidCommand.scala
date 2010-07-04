@@ -18,29 +18,27 @@ package com.scudmud
 import scala.actors._
 
 /**
- * A command for when the user wants to say something to people in the same
- * room.
+ * A command for when the user gives some sort of invalid input.
  */
-class SayCommand extends Command {
+class InvalidCommand extends Command {
   /**
-   * Execute the say command with the given arguments.
-   * @param args the message to send to others in the same room
-   * @param p    the player sending this message
+   * Execute the invalid command with the given arguments.
+   * @param args are ignored by this command for now
+   * @param p    the player sending the invalid command
    * @return     an empty delta list
    */
   def execute(args: String, p: Player): java.util.List[Delta] = {
-    p.room.sendMessage(p, p.key+" says \""+args+"\"\n")
-    p.sendMessage("You say \""+args+"\"\n")
+    p.sendMessage("Wha!?\n")
 
-    p.sendMessage("> ")
     new java.util.ArrayList[Delta]()
   }
 
   /**
    * Return the command's identifier.
-   * @return the identifier used by the say command is "say"
+   * @return invalid doesn't have a command identifier as it is what is used 
+   * when the user gives an invalid command
    */
   def getPrefix() = {
-    "say"
+    ""
   }
 }

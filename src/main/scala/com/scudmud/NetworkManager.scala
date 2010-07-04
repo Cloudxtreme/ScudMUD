@@ -98,8 +98,10 @@ object NetworkManager {
           if(client ne null)  {
             client.configureBlocking(false)
             val clientKey = client.register(selector, SelectionKey.OP_READ)
-            players(clientKey) = new Player(clientKey, ScudMUD.globalRoom)
-            ScudMUD.globalRoom.players+=players(clientKey)
+            val p = new Player(clientKey, ScudMUD.globalRoom)
+            players(clientKey) = p
+            ScudMUD.globalRoom.players+=p
+            p.sendMessage("> ")
           }
         }
       } else {
@@ -112,6 +114,7 @@ object NetworkManager {
               buffer.flip
               val request = decoder.decode(buffer).toString()
               buffer.clear
+              // Discard worthless messsages.
               if(request.size!=0) {
                 splitRequest(request).foreach { str =>
                   messages += (players(key), str)

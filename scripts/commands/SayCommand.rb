@@ -7,6 +7,7 @@ class SayCommand
   def execute(args, p)
     p.room.sendMessage(p, p.key.toString() + " says \"" + args + "\"\n")
     p.sendMessage("You say \"" + args + "\"\n")
+    p.sendMessage("> ")
 
     return Array.new
   end
