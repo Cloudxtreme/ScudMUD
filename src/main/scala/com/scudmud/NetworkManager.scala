@@ -98,9 +98,9 @@ object NetworkManager {
           if(client ne null)  {
             client.configureBlocking(false)
             val clientKey = client.register(selector, SelectionKey.OP_READ)
-            val p = new Player(clientKey, ScudMUD.globalRoom)
+            val p = new Player(clientKey, ScudMUD.rooms(0))
             players(clientKey) = p
-            ScudMUD.globalRoom.players+=p
+            ScudMUD.rooms(0).players+=p
             p.sendMessage("> ")
           }
         }

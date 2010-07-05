@@ -24,7 +24,7 @@ class PlayerQuitDelta(p: Player) extends Delta {
    * Remove the player from the world and cancel their selection key.
    */
   def applyChanges() {
-    ScudMUD.globalRoom.players-=p
+    p.room.players-=p
     NetworkManager.cancelKey(p.key) 
     ScudMUD.players.removeKey(p.key)
   }  

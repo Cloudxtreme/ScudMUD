@@ -33,10 +33,10 @@ object ScudMUD {
   var players = Map[SelectionKey, Player]()
 
   /**
-   * The global room, the only room available while I work out things and get
-   * dynamic room creation set up.
+   * The rooms associated with this world.  Create an initial room until room
+   * loading from a database is written.
    */
-  val globalRoom = new Room()
+  var rooms = Array(new Room)
 
   /**
    * The name to player map for finding a player based on a given name.
