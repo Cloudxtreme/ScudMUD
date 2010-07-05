@@ -105,9 +105,11 @@ object ScudMUD {
       // in the command handler.  Need to be extremely careful to be sure that
       // this never happens.  Deltas allow changes to be "planned" without 
       // having to have them be done in the concurrent parts of the program. 
-      val deltas = CommandHandler.execute(messages, players.values.toList) 
+      val deltas = CommandHandler.execute(messages)
 
-      // Apply deltas if we have any.
+      // Apply deltas if we have any.  Database interaction will be done as 
+      // changes occur in the deltas unless I figure out some better way of 
+      // going about it that isn't way too complicated.
       if(deltas.size>0)
         applyDeltas(deltas)
 
