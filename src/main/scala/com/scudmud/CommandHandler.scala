@@ -80,9 +80,23 @@ object CommandHandler {
   }
 
   /**
-   * Execute the given requests if it is possible to.
+   * Get the given command for the given command name.
+   * @param p   the player that sent this command request
+   * @param str the command name to look for
+   * @return    the command based on the given name
    */
-  def execute(messages: List[(Player, String)], players: List[Player]) = {
+  def getCommand(p: Player, str: String): Command = {
+    p.room.commands.get(str) getOrElse {
+      commands.get(str) getOrElse { new InvalidCommand }
+    }
+  }
+
+  /**
+   * Execute the given requests if it is possible to.
+   * @param message the messages to be processed
+   * @return        a list of deltas if any are generated
+   */
+  def execute(messages: List[(Player, String)]): List[Delta] = {
     // The number of done messages that are needed to be considered finished.
     var donesNeeded = 0
 
@@ -109,7 +123,10 @@ object CommandHandler {
           split = newSplit
         }
 
-        val command = commands.get(split(0)) getOrElse { new InvalidCommand }
+        // Get the command for the given command name.  If the command doesn't
+        // exist in the user's room then look in the global scope and if it  
+        // doesn't exist there return an invalid command.
+        val command = getCommand(p, split(0))
   
         // TODO: Switch to some logging framework. 
         println(s)

@@ -22,7 +22,23 @@ package com.scudmud
  * non-standard directions to be easily usable.
  */
 class Room extends Messageable {
+  /** 
+   * The list of players in the room.
+   */
   var players = List[Player]()
+
+  /**
+   * Initially empty command map.
+   */
+  var commands = Map[String, Command]()  
+
+  /**
+   * Add the given command to the room's command map.
+   * @param c the command to add
+   */
+  def addCommand(c: Command) { 
+    commands += (c.getPrefix() -> c)
+  }
 
   /**
    * Receive the following message and don't exclude anyone from getting it.

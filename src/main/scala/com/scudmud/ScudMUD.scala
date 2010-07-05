@@ -27,8 +27,21 @@ import java.io.File
  * sync.
  */
 object ScudMUD {
+  /**
+   * A map of players for finding a player based on their selection key.
+   */
   var players = Map[SelectionKey, Player]()
+
+  /**
+   * The global room, the only room available while I work out things and get
+   * dynamic room creation set up.
+   */
   val globalRoom = new Room()
+
+  /**
+   * The name to player map for finding a player based on a given name.
+   */
+  var nameToPlayer = Map[String, Player]()
   
   /**
    * The entry point for the program.
