@@ -87,7 +87,7 @@ object CommandHandler {
    */
   def getCommand(p: Player, str: String): Command = {
     p.room.commands.get(str) getOrElse {
-      commands.get(str) getOrElse { new InvalidCommand }
+      commands.get(str) getOrElse { InvalidCommand }
     }
   }
 

@@ -18,7 +18,7 @@ package com.scudmud
 /**
  * A command for when the user gives some sort of invalid input.
  */
-class InvalidCommand extends Command {
+object InvalidCommand extends Command {
   /**
    * Execute the invalid command with the given arguments.
    * @param args are ignored by this command for now

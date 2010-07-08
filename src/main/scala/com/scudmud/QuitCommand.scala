@@ -15,8 +15,6 @@
  */ 
 package com.scudmud
 
-import scala.actors._
-
 /**
  * A command used for when the user wants to disconnect from the server.
  */
@@ -25,7 +23,6 @@ class QuitCommand extends Command {
    * Execute the quit command ignoring any arguments given.
    * @param args the arguments given for the command, ignored by this command
    * @param p    the player executing this command
-   * @param a    the actor to send the delta to
    * @return     a list of one delta
    */
   def execute(args: String, p: Player): java.util.List[Delta] = {
