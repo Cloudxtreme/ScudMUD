@@ -23,12 +23,10 @@ class QuitCommand extends Command {
    * Execute the quit command ignoring any arguments given.
    * @param args the arguments given for the command, ignored by this command
    * @param p    the player executing this command
-   * @return     a list of one delta
    */
-  def execute(args: String, p: Player): java.util.List[Delta] = {
-    val list = new java.util.ArrayList[Delta]()
-    list.add(new PlayerQuitDelta(p))
-    list
+  def execute(args: String, p: Player) {
+    NetworkManager.cancelKey(p.key)
+    p.room.players -= p
   }
 
   /**

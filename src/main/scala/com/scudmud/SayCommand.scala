@@ -24,14 +24,11 @@ class SayCommand extends Command {
    * Execute the say command with the given arguments.
    * @param args the message to send to others in the same room
    * @param p    the player sending this message
-   * @return     an empty delta list
    */
-  def execute(args: String, p: Player): java.util.List[Delta] = {
+  def execute(args: String, p: Player) {
     p.room.sendMessage(p, p.key+" says \""+args+"\"\n")
     p.sendMessage("You say \""+args+"\"\n")
-
     p.sendMessage("> ")
-    new java.util.ArrayList[Delta]()
   }
 
   /**

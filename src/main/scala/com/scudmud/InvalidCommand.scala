@@ -23,12 +23,10 @@ object InvalidCommand extends Command {
    * Execute the invalid command with the given arguments.
    * @param args are ignored by this command for now
    * @param p    the player sending the invalid command
-   * @return     an empty delta list
    */
-  def execute(args: String, p: Player): java.util.List[Delta] = {
+  def execute(args: String, p: Player) {
     p.sendMessage("Wha!?\n")
     p.sendMessage("> ")
-    new java.util.ArrayList[Delta]()
   }
 
   /**

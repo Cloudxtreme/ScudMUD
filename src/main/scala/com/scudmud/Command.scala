@@ -27,9 +27,8 @@ trait Command {
    * @param args the arguments given for the command
    * @param p    the player executing this command
    * @param a    the actor to give deltas and the done message to
-   * @return     a list of deltas
    */
-  def execute(args: String, p: Player): java.util.List[Delta]
+  def execute(args: String, p: Player)
  
   /**
    * Give the command's name that is used to identify it for when a user wants

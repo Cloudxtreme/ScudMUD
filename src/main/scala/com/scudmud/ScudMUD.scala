@@ -48,8 +48,6 @@ object ScudMUD {
    * @param args the command line arguments the server receives
    */
   def main(args: Array[String]): Unit = {
-    CommandHandler initExecutors (Runtime.getRuntime.availableProcessors*2)
-
     val pluginDir = new File("scripts/commands")
     val scriptCommands = loadScriptCommands(pluginDir)  
    
@@ -77,16 +75,6 @@ object ScudMUD {
   }
 
   /**
-   * Apply the list of deltas to the data structures.
-   * @param deltas the changes to apply to the data structures
-   */
-  def applyDeltas(deltas: List[Delta]) {
-    for(delta <- deltas) {
-      delta.applyChanges
-    }
-  }
-
-  /**
    * The heart beat loop that ticks every manager once per turn, at the very 
    * start of the turn.
    */
@@ -101,17 +89,7 @@ object ScudMUD {
       // Get messages from the network manager sent by players.
       val messages = NetworkManager.selectNow(players)
 
-      // Pass messages to command handler.  No changes to any objects allowed
-      // in the command handler.  Need to be extremely careful to be sure that
-      // this never happens.  Deltas allow changes to be "planned" without 
-      // having to have them be done in the concurrent parts of the program. 
-      val deltas = CommandHandler.execute(messages)
-
-      // Apply deltas if we have any.  Database interaction will be done as 
-      // changes occur in the deltas unless I figure out some better way of 
-      // going about it that isn't way too complicated.
-      if(deltas.size>0)
-        applyDeltas(deltas)
+      CommandHandler.execute(messages)
 
       // Sleep the duration of the turn if the turn has not ended yet.
       val diff = System.currentTimeMillis() - startTime
