@@ -15,6 +15,8 @@
  */ 
 package com.scudmud
 
+import scala.actors._
+import Actor._
 import scala.collection.mutable.Map
 
 /**
@@ -27,10 +29,23 @@ import scala.collection.mutable.Map
 case class ExecuteCommand(c: Command, args: String, p: Player)
 
 /**
- * For handling the parsing and execution of commands.  
+ * For notifying the main thread that one more command is done executing.
  */
-object CommandHandler {
+case class Done()
+
+/**
+ * An actor for handling the execution of commands.
+ */
+object CommandHandler extends Actor {
+  /**
+   * The global command map.
+   */
   val commands = Map[String, Command]()
+  
+  /**
+   * The actor to send done messages to.
+   */
+  var mainActor: Actor = _
 
   /**
    * Add a command to the command handler.
@@ -53,40 +68,14 @@ object CommandHandler {
   }
 
   /**
-   * Execute the given requests if it is possible to.
-   * @param message the messages to be processed
+   * Respond to messages sent to this actor.
    */
-  def execute(messages: List[(Player, String)]) {
-    // Split up each message to extract the command name and have it executed
-    // if it can be executed.
-    messages.foreach { messageTuple =>
-      val p = messageTuple._1
-      var s = messageTuple._2
-
-      // Give the user a new prompt.
-      if(s=="\r") {
-        p.sendMessage("> ")
-      } else {
-        s = s.trim 
-    
-        // Extract the command name as that will always be the first token in 
-        // the request. 
-        var split = s.split(" ", 2) 
-        if(split.length != 2) {
-          val newSplit = new Array[String](2)
-          newSplit(0) = split(0)
-          newSplit(1) = ""
-          split = newSplit
-        }
-
-        // Get the command for the given command name.  If the command doesn't
-        // exist in the user's room then look in the global scope and if it  
-        // doesn't exist there return an invalid command.
-        val command = getCommand(p, split(0))
-  
-        // TODO: Switch to some logging framework. 
-        println(s)
-        command.execute(split(1), p)
+  def act() {
+    loop {
+      react {
+        case ExecuteCommand(c: Command, args: String, p: Player) => 
+          c.execute(args, p)
+          mainActor ! Done()
       }
     }
   }

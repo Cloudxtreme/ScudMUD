@@ -48,6 +48,10 @@ object ScudMUD {
    * @param args the command line arguments the server receives
    */
   def main(args: Array[String]): Unit = {
+    CommandParser.start
+    CommandHandler.start
+    CommandHandler.mainActor = self
+    CommandParser.mainActor = self
     val pluginDir = new File("scripts/commands")
     val scriptCommands = loadScriptCommands(pluginDir)  
    
@@ -87,9 +91,13 @@ object ScudMUD {
       // for various actions here.
 
       // Get messages from the network manager sent by players.
-      val messages = NetworkManager.selectNow(players)
+      var donesNeeded = NetworkManager.selectNow(players)
 
-      CommandHandler.execute(messages)
+      while(donesNeeded>0) {
+        receive {
+          case Done() => donesNeeded -= 1
+        }
+      } 
 
       // Sleep the duration of the turn if the turn has not ended yet.
       val diff = System.currentTimeMillis() - startTime

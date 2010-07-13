@@ -88,7 +88,7 @@ object NetworkManager {
   def selectNow(players: Map[SelectionKey, Player]) = {
     selector.selectNow
     val keys = selector.selectedKeys
-    var messages = List[(Player, String)]()
+    var donesNeeded = 0
     val iterator = keys.iterator
     while(iterator.hasNext) {
       val key = iterator.next
@@ -117,14 +117,18 @@ object NetworkManager {
               // Discard worthless messsages.
               if(request.size!=0) {
                 splitRequest(request).foreach { str =>
-                  messages += (players(key), str)
+                  CommandParser ! (players(key), str)
+                  donesNeeded += 1
                 } 
               }
             } else {
               client.close 
               key.cancel
-              // TODO: Clean up client disconnection through EOF.
+              // Clean up client disconnection through EOF.
+              val player = players(key)
+              player.room.players-=player
               players removeKey key
+              cancelKey(key)
             }
           }
         } catch {
@@ -133,6 +137,6 @@ object NetworkManager {
         }
       }         
     }
-    messages
+    donesNeeded
   }
 }
