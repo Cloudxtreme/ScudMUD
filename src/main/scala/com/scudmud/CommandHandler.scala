@@ -38,21 +38,34 @@ case class Done()
  */
 object CommandHandler extends Actor {
   /**
-   * The global command map.
+   * The global command map for registered users.
    */
   val commands = Map[String, Command]()
-  
+
+  /**
+   * The global command map for unregistered users.
+   */ 
+  val unregisteredCommands = Map[String, Command]()
+ 
   /**
    * The actor to send done messages to.
    */
   var mainActor: Actor = _
 
   /**
-   * Add a command to the command handler.
+   * Add a command to the command handler for registered users.
    * @param c the command to add
    */
   def addCommand(c: Command) {
     commands.put(c.getPrefix(), c)
+  }
+
+  /**
+   * Add a command to the command handler for unregistered users.
+   * @param c the command to add
+   */
+  def addUnregisteredCommand(c: Command) {
+    unregisteredCommands.put(c.getPrefix(), c)
   }
 
   /**
@@ -62,8 +75,14 @@ object CommandHandler extends Actor {
    * @return    the command based on the given name
    */
   def getCommand(p: Player, str: String): Command = {
-    p.room.commands.get(str) getOrElse {
-      commands.get(str) getOrElse { InvalidCommand }
+    // If the user is registered get commands as usual.
+    if(p.registered) {
+      p.room.commands.get(str) getOrElse {
+        commands.get(str) getOrElse { InvalidCommand }
+      }
+    } else {
+      // If the user is not registered then pull from a special command map.
+      unregisteredCommands.get(str) getOrElse { InvalidCommand }
     }
   }
 

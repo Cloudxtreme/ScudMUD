@@ -60,6 +60,7 @@ object ScudMUD {
     val quit = new QuitCommand
     //CommandHandler addCommand say
     CommandHandler addCommand quit
+    CommandHandler addUnregisteredCommand quit
     NetworkManager // Start listening for clients
     heartBeatLoop()  
     0 

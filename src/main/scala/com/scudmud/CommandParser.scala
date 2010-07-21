@@ -34,28 +34,32 @@ object CommandParser extends Actor {
     loop {
       react {
         case (p: Player, str: String) => 
-          // Give the user a new prompt.
-          if(str=="\r") {
-            p.sendMessage("> ")
-            mainActor ! Done()
+          if(!p.messageQueue.isEmpty) { 
+            p.messageQueue.get.handleAnswer(str, p);
           } else {
-            val trimmedStr = str.trim
+            // Give the user a new prompt.
+            if(str=="\r") {
+              p.sendMessage("> ")
+              mainActor ! Done()
+            } else {
+              val trimmedStr = str.trim
 
-            // Extract the command name(will always be the first token in the
-            // request).
-            var split = trimmedStr.split(" ", 2)
-            if(split.length != 2) {
-              val newSplit = new Array[String](2)
-              newSplit(0) = split(0)
-              newSplit(1) = ""
-              split = newSplit
+              // Extract the command name(will always be the first token in the
+              // request).
+              var split = trimmedStr.split(" ", 2)
+              if(split.length != 2) {
+                val newSplit = new Array[String](2)
+                newSplit(0) = split(0)
+                newSplit(1) = ""
+                split = newSplit
+              }
+
+              // Get the command for the given command name.  If the command
+              // doesn't exist in the user's room then look in the global scope 
+              // and if it doesn't exist there return an invalid command.
+              val command = CommandHandler.getCommand(p, split(0))
+              CommandHandler ! ExecuteCommand(command, split(1), p)
             }
-
-            // Get the command for the given command name.  If the command
-            // doesn't exist in the user's room then look in the global scope 
-            // and if it doesn't exist there return an invalid command.
-            val command = CommandHandler.getCommand(p, split(0))
-            CommandHandler ! ExecuteCommand(command, split(1), p)
           }
       }
     }

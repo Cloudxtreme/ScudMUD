@@ -24,7 +24,7 @@ import org.scalatest.matchers.MustMatchers
 class CommandHandlerSpec extends Spec with MustMatchers with MavenTrick {
   describe("The command handler") {
     it("should return a room's command over a global command when getCommand" +
-	" is called") {
+	" is called for registered users.") {
       val r = new Room
       val sayRoom = new SayCommand
       r addCommand sayRoom
@@ -32,7 +32,16 @@ class CommandHandlerSpec extends Spec with MustMatchers with MavenTrick {
       CommandHandler addCommand sayGlobal
       // Generate a player with nulls as we don't need real data to test quit.
       val p = new Player(null, r)
+      p.registered = true
       assert(CommandHandler.getCommand(p, "say") eq sayRoom)
+    }
+    it("should return commands meant for unregistered users if the user has " +
+	" not registered yet.") {
+      val sayUnregistered = new SayCommand
+      CommandHandler addUnregisteredCommand sayUnregistered
+      val r = new Room
+      val p = new Player(null, r)
+      assert(CommandHandler.getCommand(p, "say") eq sayUnregistered)
     }
   }
 }

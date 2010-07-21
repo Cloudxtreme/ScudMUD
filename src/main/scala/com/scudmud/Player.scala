@@ -23,6 +23,17 @@ import java.nio.channels._
  */
 class Player(val key: SelectionKey, var room: Room) extends Messageable {
   /**
+   * Players start off unregistered.
+   */
+  var registered = false;
+
+  /**
+   * The message queue the player is currently associated with or none if the 
+   * player is not associated with any.
+   */
+  var messageQueue: Option[MessageQueue] = None;
+
+  /**
    * Have the player receive the given message.
    * @param message the message for the player to receive
    */
